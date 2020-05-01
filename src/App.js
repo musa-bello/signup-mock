@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import {
   Globalstyle, 
   Container, 
@@ -8,7 +7,8 @@ import {
   Heading,
   ParagraphText,
   FormContent,
-  FormDiv} from './Styled/Container';
+  FormDiv,
+  TopDiv} from './Styled/Container';
   import InputContainer from './Components/InputContainer'
 import './App.css';
 
@@ -30,16 +30,13 @@ function App() {
         </Column>
 
         <Column> 
-        <FormContent>
-          <FormDiv><strong>Try it free 7days</strong> then $20/mo. thereafter</FormDiv>
-          <FormDiv bgColor="white">
-            <InputContainer />
-            {/* <RegisterForm /> */}
-          </FormDiv>
-        </FormContent>
-        
-        </Column>
-        
+          <FormContent>
+            <TopDiv><strong>Try it free 7days</strong> then $20/mo. thereafter</TopDiv>
+            <FormDiv bgColor="white">
+              <InputContainer />
+            </FormDiv>
+          </FormContent>
+        </Column> 
       </Container>
     </>
   );

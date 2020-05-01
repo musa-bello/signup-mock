@@ -1,171 +1,122 @@
 import React from 'react'
 import InputField from './InputField'
-import {SubmitButton, ErrorMessage, ErrorStyle} from '../Styled/Container'
-/* import {Input} from '../Styled/Container'
-import styled from 'styled-components'
-import error from '../Images/error.svg'
-import { FaBeer } from 'react-icons/fa'; */
-
+import {SubmitButton, TermsText, TermsSpan} from '../Styled/Container'
 
 class InputContainer extends React.Component {
-    constructor() {
-      super();
-      this.state = {
-        fields: {},
-        errors: {}
+    state = {
+      user: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: ""
+      },
+      errors: {},
+      submitted: false
+    };
+  
+    handleChange = event => {
+      const { user } = this.state;
+      user[event.target.name] = event.target.value;
+      this.setState({ user });
+    };
+  
+    onSubmit = () => {
+      const {
+        user: { firstName, lastName, email, password }
+      } = this.state;
+      let err = {};
+  
+      if (!firstName) {
+        err.firstName = "First Name cannot be empty ";
       }
 
-      this.handleChange = this.handleChange.bind(this);
-      this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
+      if (!lastName) {
+        err.lastName = "Last Name cannot be empty ";
+      }
 
+      /* if (!email) {
+        err.email = "Email cannot be empty ";
+      } */
+
+        //regular expression for email validation
+        var pattern = new RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i);
+        if (!pattern.test(email)) {
+          err.email = "Looks like this is not an email";
+        }
+      
+      if (!password) {
+        err.password = "Password cannot be empty ";
+        /* if (password.length < 8) {
+          err.password = "Password must be at least 8 characters!";
+        } */
+      }
+
+      this.setState({ errors: err }, () => {
+        if (Object.getOwnPropertyNames(this.state.errors).length === 0) {
+          this.setState({ submitted: true });
+        }
+      });
     };
 
-    handleChange(event) {
-      let fields = this.state.fields;
-      fields[event.target.name] = event.target.value;
-      this.setState({
-        fields
-      });
-
-    }
-
-    submituserRegistrationForm(e) {
-      e.preventDefault();
-      if (this.validateForm()) {
-          let fields = {};
-          fields["firstName"] = "";
-          fields["lastName"] = "";
-          fields["emailid"] = "";
-          fields["password"] = "";
-          this.setState({fields:fields});
-          alert("Form submitted");
-      }
-
-    }
-
-    validateForm() {
-
-      let fields = this.state.fields;
-      let errors = {};
-      let formIsValid = true;
-
-      if (!fields["firstName"]) {
-        formIsValid = false;
-        errors["firstName"] = "*first Name cannot be empty";
-      }
-
-      if (typeof fields["firstName"] !== "undefined") {
-        if (!fields["firstName"].match(/^[a-zA-Z ]*$/)) {
-          formIsValid = false;
-          errors["firstName"] = "*Please enter alphabet characters only.";
-        }
-      }
-
-      if (!fields["lastName"]) {
-        formIsValid = false;
-        errors["lastName"] = "*last Name cannot be empty";
-      }
-
-      if (typeof fields["lastName"] !== "undefined") {
-        if (!fields["lastName"].match(/^[a-zA-Z ]*$/)) {
-          formIsValid = false;
-          errors["lastName"] = "*Please enter alphabet characters only.";
-        }
-      }
-
-      if (!fields["emailid"]) {
-        formIsValid = false;
-        errors["emailid"] = "*please enter your email";
-      }
-
-      if (typeof fields["emailid"] !== "undefined") {
-        //regular expression for email validation
-        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-        if (!pattern.test(fields["emailid"])) {
-          formIsValid = false;
-          errors["emailid"] = "*Looks like this is not an email";
-        }
-      }
-
-     
-
-      if (!fields["password"]) {
-        formIsValid = false;
-        errors["password"] = "*please enter your password.";
-      }
-
-      if (typeof fields["password"] !== "undefined") {
-        if (!fields["password"].match(/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).*$/)) {
-          formIsValid = false;
-          errors["password"] = "*Please enter secure and strong password.";
-        }
-      }
-
-      this.setState({
-        errors: errors
-      });
-      return formIsValid;
-
-
-    }
-
-
-
   render() {
+    const {
+      submitted,
+      errors,
+      user: { firstName, lastName, email, password }
+    } = this.state;
+
     return (
     <>
-        
-        
-        <InputField   
-        name="firstName"
-        type="text"
-        value={this.state.fields.firstName}
-        placeholder="First Name"
-        onChange={this.handleChange} 
-        />
-        <ErrorStyle />
-        <ErrorMessage> {this.state.errors.firstName} </ErrorMessage>
-        
-        <InputField   
-        name="lastName"
-        type="text"
-        value={this.state.fields.lastName}
-        placeholder="Last Name"
-        onChange={this.handleChange} 
-        />
-        <ErrorStyle />
-        <ErrorMessage> {this.state.errors.lastName} </ErrorMessage>
+      {submitted ? (
+            alert (`Welcome onboard, ${firstName} ${lastName}`)
+          ) : (
+            <>
+              <InputField   
+                name="firstName"
+                type="text"
+                value={firstName}
+                placeholder="First Name"
+                onChange={this.handleChange} 
+                error={errors.firstName}
+              />
+              
+              <InputField   
+                name="lastName"
+                type="text"
+                value={lastName}
+                placeholder="Last Name"
+                onChange={this.handleChange} 
+                error = {errors.lastName}
+              />
+              
+              <InputField   
+                name="email"
+                type="email"
+                value={email}
+                placeholder="Email"
+                onChange={this.handleChange}
+                error={errors.email} 
+              />
 
-        <InputField   
-        name="emailid"
-        type="email"
-        value={this.state.fields.emailid}
-        placeholder="Email"
-        onChange={this.handleChange} 
-        />
-        <ErrorStyle />
-        <ErrorMessage> {this.state.errors.emailid} </ErrorMessage>
+              <InputField
+                name="password"
+                type="password"
+                value={password}
+                placeholder="Password"
+                onChange={this.handleChange} 
+                error={errors.password}
+              />
 
-        <InputField
-        name="password"
-        type="password"
-        value={this.state.fields.password}
-        placeholder="Password"
-        onChange={this.handleChange} 
-        />
-        <ErrorStyle />
-        <ErrorMessage> {this.state.errors.password} </ErrorMessage>
-        
-        <SubmitButton onClick={this.submituserRegistrationForm}> CLAIM YOUR FREE TRIAL </SubmitButton>
-        
+              <SubmitButton onClick={this.onSubmit}> CLAIM YOUR FREE TRIAL </SubmitButton>
 
+              <TermsText>By clicking the button, you are agreeing to our <TermsSpan>Terms and Services</TermsSpan></TermsText>
+            </>
+        )}
         
-    
-</>
+    </>
 
-      );
+      )
   }
-
 
 }
 
