@@ -1,6 +1,8 @@
 # Sign up
 Sign up UI for Mobile, desktop devices with input validation in React.
 
+Live test URL: https://signup-mock.netlify.app/
+
 <p align="center">
   <img src="./screenshot.png" alt='Screenshot'>
 </p>
